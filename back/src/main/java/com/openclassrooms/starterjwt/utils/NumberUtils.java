@@ -8,13 +8,11 @@ public class NumberUtils {
         if(value == null || value.trim().isBlank()){
             return true;
         }
-
         try{
             Long.valueOf(value.trim());
                 return false;
         }catch(NumberFormatException e){
                 return true;
         }
-
     }
 }
