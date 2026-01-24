@@ -65,21 +65,14 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userService.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already taken!"));
-        }
-
         // Create new user's account
         User user = new User(signUpRequest.getEmail(),
                 signUpRequest.getLastName(),
                 signUpRequest.getFirstName(),
                 passwordEncoder.encode(signUpRequest.getPassword()),
                 false);
-
         userService.createUser(user);
-
+        
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 }

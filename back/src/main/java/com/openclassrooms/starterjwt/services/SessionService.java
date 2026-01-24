@@ -6,6 +6,8 @@ import com.openclassrooms.starterjwt.models.Session;
 import com.openclassrooms.starterjwt.models.User;
 import com.openclassrooms.starterjwt.repository.SessionRepository;
 import com.openclassrooms.starterjwt.repository.UserRepository;
+import com.openclassrooms.starterjwt.utils.NumberUtils;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,25 +36,50 @@ public class SessionService {
         return this.sessionRepository.findAll();
     }
 
-    public Session getById(Long id) {
-        return this.sessionRepository.findById(id).orElse(null);
+    @SneakyThrows
+    public Session getById(String id) {
+
+        if(NumberUtils.isValidLong(id)){
+            throw new IllegalArgumentException("id not valid");
+        }
+
+        Long idLong = Long.valueOf(id);
+        Session session = this.sessionRepository.findById(idLong).orElse(null);
+
+        if (session == null) {
+            throw new NotFoundException("Session not found");
+        }
+
+        return session;
+
     }
 
-    public Session update(Long id, Session session) {
-        session.setId(id);
+    public Session update(String id, Session session) {
+        if(NumberUtils.isValidLong(id)){
+            throw new IllegalArgumentException("id not valid");
+        }
+        Long idLong = Long.valueOf(id);
+        session.setId(idLong);
         return this.sessionRepository.save(session);
     }
 
-    public void participate(Long id, Long userId) {
-        Session session = this.sessionRepository.findById(id).orElse(null);
-        User user = this.userRepository.findById(userId).orElse(null);
+    @SneakyThrows
+    public void participate(String id, String userId) {
+        if(NumberUtils.isValidLong(id)){
+            throw new IllegalArgumentException("id not valid");
+        }
+        Long idLong = Long.valueOf(id);
+        Long idUserLong = Long.valueOf(userId);
+        Session session = this.sessionRepository.findById(idLong).orElse(null);
+        User user = this.userRepository.findById(idUserLong).orElse(null);
+
         if (session == null || user == null) {
-            throw new NotFoundException();
+            throw new NotFoundException("not found session or not found user");
         }
 
-        boolean alreadyParticipate = session.getUsers().stream().anyMatch(o -> o.getId().equals(userId));
+        boolean alreadyParticipate = session.getUsers().stream().anyMatch(o -> o.getId().equals(idUserLong));
         if (alreadyParticipate) {
-            throw new BadRequestException();
+            throw new BadRequestException("Already Participate");
         }
 
         session.getUsers().add(user);
@@ -60,18 +87,26 @@ public class SessionService {
         this.sessionRepository.save(session);
     }
 
-    public void noLongerParticipate(Long id, Long userId) {
-        Session session = this.sessionRepository.findById(id).orElse(null);
+    @SneakyThrows
+    public void noLongerParticipate(String id, String userId) {
+        if(NumberUtils.isValidLong(id)){
+            throw new IllegalArgumentException("id not valid");
+        }
+
+        Long idLong = Long.valueOf(id);
+        Long idUserLong = Long.valueOf(userId);
+
+        Session session = this.sessionRepository.findById(idLong).orElse(null);
         if (session == null) {
-            throw new NotFoundException();
+            throw new NotFoundException("not found session");
         }
 
-        boolean alreadyParticipate = session.getUsers().stream().anyMatch(o -> o.getId().equals(userId));
+        boolean alreadyParticipate = session.getUsers().stream().anyMatch(o -> o.getId().equals(idUserLong));
         if (!alreadyParticipate) {
-            throw new BadRequestException();
+            throw new BadRequestException("Not already participate");
         }
 
-        session.setUsers(session.getUsers().stream().filter(user -> !user.getId().equals(userId)).collect(Collectors.toList()));
+        session.setUsers(session.getUsers().stream().filter(user -> !user.getId().equals(idUserLong)).collect(Collectors.toList()));
 
         this.sessionRepository.save(session);
     }

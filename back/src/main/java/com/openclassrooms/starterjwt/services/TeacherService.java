@@ -1,7 +1,10 @@
 package com.openclassrooms.starterjwt.services;
 
+import com.openclassrooms.starterjwt.exception.NotFoundException;
 import com.openclassrooms.starterjwt.models.Teacher;
 import com.openclassrooms.starterjwt.repository.TeacherRepository;
+import com.openclassrooms.starterjwt.utils.NumberUtils;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +21,20 @@ public class TeacherService {
         return this.teacherRepository.findAll();
     }
 
-    public Teacher findById(Long id) {
-        return this.teacherRepository.findById(id).orElse(null);
+    @SneakyThrows
+    public Teacher findById(String id) {
+
+        if(NumberUtils.isValidLong(id)){
+            throw new IllegalArgumentException("id not valid");
+        }
+
+        Long idLong = Long.valueOf(id);
+        Teacher teacher = this.teacherRepository.findById(idLong).orElse(null);
+
+        if (teacher == null) {
+            throw new NotFoundException("Teacher not found");
+        }
+
+        return teacher;
     }
 }

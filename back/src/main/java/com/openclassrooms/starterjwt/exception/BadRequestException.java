@@ -1,8 +1,24 @@
 package com.openclassrooms.starterjwt.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import lombok.Getter;
+import lombok.Setter;
 
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class BadRequestException extends RuntimeException {
+@Setter
+@Getter
+public class BadRequestException extends Exception {
+
+    private String messageException;
+    private int code;
+
+    public BadRequestException(String message) {
+        super(message);
+    }
+
+    public String getMessageException() {
+        return messageException= "Bad Request";
+    }
+
+    public int getCode() {
+        return code = 400;
+    }
 }
