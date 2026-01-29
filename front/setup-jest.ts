@@ -26,6 +26,12 @@ Object.defineProperty(document.body.style, 'transform', {
     };
   },
 });
+jest.mock('./src/environments/environment', () => ({
+  environment: {
+    baseUrl: 'http://localhost:8080/api',
+    production: false
+  }
+}));
 
 /* output shorter and more meaningful Zone error stack traces */
 // Error.stackTraceLimit = 2;
