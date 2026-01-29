@@ -13,6 +13,7 @@
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
+    "esModuleInterop": true, 
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
@@ -29,5 +30,6 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "exclude": ["cypress"]
+  "exclude": ["cypress/**/*.ts",
+    "cypress.config.ts"]
 }

@@ -8,7 +8,13 @@ module.exports = {
   verbose: false,
   collectCoverage: false,
   coverageDirectory: './coverage/jest',
-  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
+  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
+  transform: {
+      '^.+\\.ts$': 'ts-jest', // Only transform .ts files
+  },
+  transformIgnorePatterns: [
+        '/node_modules/(?!flat)/', // Exclude modules except 'flat' from transformation
+    ],
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/'],
   coverageThreshold: {
     global: {
