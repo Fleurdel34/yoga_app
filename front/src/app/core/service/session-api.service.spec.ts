@@ -9,9 +9,8 @@ describe('SessionsService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports:[
-        HttpClientModule
-      ]
+      imports: [HttpClientModule],
+      providers: [SessionApiService]
     });
     service = TestBed.inject(SessionApiService);
   });

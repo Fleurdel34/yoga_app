@@ -11,7 +11,8 @@ describe('UserService', () => {
     TestBed.configureTestingModule({
       imports:[
         HttpClientModule
-      ]
+      ],
+      providers: [UserService]
     });
     service = TestBed.inject(UserService);
   });
@@ -19,4 +20,5 @@ describe('UserService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+  
 });

@@ -11,7 +11,8 @@ describe('TeacherService', () => {
     TestBed.configureTestingModule({
       imports:[
         HttpClientModule
-      ]
+      ],
+      providers: [TeacherService]
     });
     service = TestBed.inject(TeacherService);
   });

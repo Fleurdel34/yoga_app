@@ -13,11 +13,8 @@ describe('AppComponent', () => {
       imports: [
         RouterTestingModule,
         HttpClientModule,
-        MatToolbarModule
-      ],
-      declarations: [
-        AppComponent
-      ],
+        MatToolbarModule,
+        AppComponent]
     }).compileComponents();
   });
 
