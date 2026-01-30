@@ -1,7 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterTestingModule, } from '@angular/router/testing';
 import { expect } from '@jest/globals';
 import { DetailComponent } from './detail.component';
@@ -83,7 +82,7 @@ describe('DetailComponent', () => {
     })
       .overrideProvider(MatSnackBar, { useValue: mockSnackBar })
       .compileComponents();
-
+      
       sessionService= TestBed.inject(SessionService);
       fixture = TestBed.createComponent(DetailComponent);
       component = fixture.componentInstance;

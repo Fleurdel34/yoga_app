@@ -8,7 +8,7 @@ module.exports = {
   verbose: false,
   collectCoverage: true,
   coverageDirectory: './coverage/jest',
-  collectCoverageFrom: [ "src/app/**/*.ts", "!src/app/**/*.spec.ts", "!src/main.ts", "!src/polyfills.ts" ],
+  collectCoverageFrom: [ "src/app/**/*.ts", "!src/app/**/*.spec.ts", "!src/main.ts", "!src/polyfills.ts","!src/app/app.config.ts", "!src/app/app.routes.ts"],
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
   transform: {
       '^.+\\.ts$': 'ts-jest', // Only transform .ts files
