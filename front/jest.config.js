@@ -6,8 +6,9 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
   bail: false,
   verbose: false,
-  collectCoverage: false,
+  collectCoverage: true,
   coverageDirectory: './coverage/jest',
+  collectCoverageFrom: [ "src/app/**/*.ts", "!src/app/**/*.spec.ts", "!src/main.ts", "!src/polyfills.ts" ],
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
   transform: {
       '^.+\\.ts$': 'ts-jest', // Only transform .ts files

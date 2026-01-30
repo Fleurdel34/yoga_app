@@ -18,7 +18,7 @@ describe('SessionService', () => {
     expect(service).toBeTruthy();
   });
 
-  //testing logIn method connecting to a mock session isLogged at true
+  
   it('should log in a session', () => {
     const mockSessionInfo = { token: 'abcd1234', id: 1, type: 'admin', username: 'testUser', firstName: 'Test', lastName: 'User', admin: true };
     service.logIn(mockSessionInfo);
@@ -26,7 +26,7 @@ describe('SessionService', () => {
     expect(service.sessionInformation).toEqual(mockSessionInfo);
   });
 
- //testing logOut method setting session isLogged at false
+
   it('should log out a session', () => {
     service.logOut();
     expect(service.isLogged).toBe(false);
