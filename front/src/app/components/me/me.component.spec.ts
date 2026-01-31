@@ -71,7 +71,7 @@ describe('MeComponent', () => {
   });
 
 
-  it('should have information user after call backend', () => {
+  it('should have information user', () => {
     const userId = mockSessionService.sessionInformation.id.toString();
     expect(mockUserService.getById).toHaveBeenCalledWith(userId);
     expect(component.user).toEqual(userId);

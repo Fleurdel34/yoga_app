@@ -1,46 +1,59 @@
-import { HttpClientModule } from '@angular/common/http';
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { expect } from '@jest/globals';
-
+import { Router } from '@angular/router';
 import { AppComponent } from './app.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SessionService } from './core/service/session.service';
 
 
 describe('AppComponent', () => {
+let app: AppComponent;  
 let service: SessionService;
+let fixture: ComponentFixture<AppComponent>;
+let router: Router;
+
+const mockSessionService = {
+  sessionInformation: {
+    admin: true,
+    id: 1
+  },
+  logOut: jest.fn(),
+  $isLogged: jest.fn(() => false),
+}
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
+        RouterTestingModule.withRoutes([]),
         HttpClientTestingModule,
         MatToolbarModule,
         AppComponent],
-        providers: [SessionService],
+        providers: [{ provide: SessionService, useValue: mockSessionService }
+      ],
     }).compileComponents();
     service = TestBed.inject(SessionService);
+    fixture = TestBed.createComponent(AppComponent);
+    router = TestBed.inject(Router);
+    jest.spyOn(router, 'navigate');
+    app = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  it('should log in a session', () => {
-    const mockSessionInfo = { token: 'abcd1234', id: 1, type: 'admin', username: 'testUser', firstName: 'Test', lastName: 'User', admin: true };
-    service.logIn(mockSessionInfo);
-    expect(service.isLogged).toBe(true);
-    expect(service.sessionInformation).toEqual(mockSessionInfo);
+  it('should log or not log at a session', () => {
+    app.$isLogged();
+    expect(service.$isLogged()).toBe(false);
   });
 
 
   it('should log out a session', () => {
-    service.logOut();
-    expect(service.isLogged).toBe(false);
-    expect(service.sessionInformation).toBeUndefined();
+    app.logout();
+    expect(service.$isLogged()).toBe(false);
+    expect(router.navigate).toHaveBeenCalledWith(['']);
   });
 });

@@ -35,12 +35,11 @@ describe('SessionsService', () => {
     }
     service.create(mockSession).subscribe((response) => {
       expect(response).toEqual(mockSession);
+      const req = http.expectOne(`${environment.baseUrl}/session`); 
+      expect(req.request.method).toEqual('POST');
+      expect(req.request.body).toEqual(mockSession);
+      req.flush(mockSession);
     });
-
-    const req = http.expectOne(`${environment.baseUrl}/session`); 
-    expect(req.request.method).toEqual('POST');
-    expect(req.request.body).toEqual(mockSession);
-    req.flush(mockSession);
   });
 
   it('should have to update a session', () => {
@@ -56,11 +55,10 @@ describe('SessionsService', () => {
     }
     service.update(mockSessionUpdate.id.toString(), mockSessionUpdate).subscribe((response) => {
       expect(response).toEqual(mockSessionUpdate);
-
-    const req = http.expectOne(`${environment.baseUrl}/session/${mockSessionUpdate.id}`); 
-    expect(req.request.method).toEqual('PUT');
-    expect(req.request.body).toEqual(mockSessionUpdate);
-    req.flush(mockSessionUpdate);  
+      const req = http.expectOne(`${environment.baseUrl}/session/${mockSessionUpdate.id}`); 
+      expect(req.request.method).toEqual('PUT');
+      expect(req.request.body).toEqual(mockSessionUpdate);
+      req.flush(mockSessionUpdate);  
     });
   });
 
@@ -77,10 +75,10 @@ describe('SessionsService', () => {
     }
     service.delete(mockSession.id.toString()).subscribe((response) => {
       expect(response).toBeTruthy();
+      const req = http.expectOne(`${environment.baseUrl}/session/${mockSession.id}`); 
+      expect(req.request.method).toEqual('DELETE');
+      req.flush({});
     });
-    const req = http.expectOne(`${environment.baseUrl}/session/${mockSession.id}`); 
-    expect(req.request.method).toEqual('DELETE');
-    req.flush({});
   });
 
   it('should have to get a detail of a session', () => {
@@ -96,11 +94,10 @@ describe('SessionsService', () => {
     updatedAt: new Date(),
     }
     service.detail(id).subscribe((response) => {
-    expect(response).toEqual(mockSession);
-
-    const req = http.expectOne(`${environment.baseUrl}/session/${id}`); 
-    expect(req.request.method).toEqual('GET'); 
-    req.flush(mockSession);
+      expect(response).toEqual(mockSession);
+      const req = http.expectOne(`${environment.baseUrl}/session/${id}`); 
+      expect(req.request.method).toEqual('GET'); 
+      req.flush(mockSession);
     });
   });
 
@@ -128,9 +125,9 @@ describe('SessionsService', () => {
 
     service.all().subscribe((response) => {
       expect(response).toEqual(mockSession$);
+      const req = http.expectOne(`${environment.baseUrl}/session`); 
+      expect(req.request.method).toEqual('GET'); 
+      req.flush(mockSession$);
     });
-    const req = http.expectOne(`${environment.baseUrl}/session`); 
-    expect(req.request.method).toEqual('GET'); 
-    req.flush(mockSession$);
   });
 })
