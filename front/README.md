@@ -41,8 +41,15 @@ Report is available here:
 
 Launching test:
 
-> npm run test
+> npm run test or npm test
 
 for following change:
 
 > npm run test:watch
+
+For coverage:
+
+> npm test -- --coverage
+
+The report is visible in the terminal and/or in the browser.
+To view the report in the browser, open the folder "coverage/Icov-report/app/index.html" at the root of the Front project, double-click the index.html file, or right-click and select "Open with Live Server" if the Live Server extension is installed.
