@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 describe('Login spec', () => {
   it('Login successfull', () => {
     cy.visit('/login')
@@ -24,4 +26,27 @@ describe('Login spec', () => {
 
     cy.url().should('include', '/sessions')
   })
+
+
+  it('Login failed', () => {
+    cy.visit('/login')
+
+    cy.intercept('POST', '/api/auth/login', {
+      statusCode: 401,
+        body: {
+        id: 1,
+        username: 'userName',
+        firstName: 'firstName',
+        lastName: 'lastName',
+        admin: true
+      },
+    })
+
+    cy.get('input[formControlName=email]').type("yoga@studio.com")
+    cy.get('input[formControlName=password]').type(`${"wrongPassword"}{enter}`)
+    cy.get('button[type=submit]').click()
+    cy.get('.error').should('be.visible').and('contain.text', "An error occurred");
+
+  })
 });
+
