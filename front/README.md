@@ -25,6 +25,10 @@ Launch Front-end:
 
 #### E2E
 
+Lauching cypress tool:
+
+npx cypress open
+
 Launching e2e test:
 
 > npm run e2e
