@@ -11,7 +11,6 @@ describe('Register spec', () => {
         lastName: 'Doe',
         email: 'yoga@studio.com',
         password: 'test!1234',
-        admin: true
       }})  
 
     cy.get('input[formControlName=firstName]').type("John")
@@ -21,4 +20,24 @@ describe('Register spec', () => {
 
     cy.url().should('include', '/login')
   })
+
+  it('Register failed', () => {
+    cy.visit('/register')
+
+    cy.intercept('POST', '/api/auth/register', {
+      statusCode: 404,
+      body: {
+        firstName: 'John',
+        lastName: 'Doe',
+        password: 'test!1234',
+      }})  
+
+    cy.get('input[formControlName=firstName]').type("John")
+    cy.get('input[formControlName=lastName]').type("Doe")
+    cy.get('input[formControlName=email]').type("yoga@studio.com")
+    cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+    cy.get('button[type=submit]').click()
+    cy.get('.error').should('be.visible').and('contain.text', "An error occurred");
+  })
 }) 
+

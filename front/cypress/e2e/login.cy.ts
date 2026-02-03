@@ -7,9 +7,8 @@ describe('Login spec', () => {
     cy.intercept('POST', '/api/auth/login', {
       body: {
         id: 1,
-        username: 'userName',
-        firstName: 'firstName',
-        lastName: 'lastName',
+        email:"yoga@studio.com",
+        password:"test!1234",
         admin: true
       },
     })
@@ -28,17 +27,35 @@ describe('Login spec', () => {
   })
 
 
-  it('Login failed', () => {
+  it('Login unauthorised', () => {
     cy.visit('/login')
 
     cy.intercept('POST', '/api/auth/login', {
       statusCode: 401,
         body: {
         id: 1,
-        username: 'userName',
-        firstName: 'firstName',
-        lastName: 'lastName',
-        admin: true
+        email:"yoga@studio.com",
+        password:"test!1234",
+        admin: false
+      },
+    })
+
+    cy.get('input[formControlName=email]').type("yoga@studio.com")
+    cy.get('input[formControlName=password]').type(`${"wrongPassword"}{enter}`)
+    cy.get('button[type=submit]').click()
+    cy.get('.error').should('be.visible').and('contain.text', "An error occurred");
+
+  })
+
+  it('Login failed', () => {
+    cy.visit('/login')
+
+    cy.intercept('POST', '/api/auth/login', {
+      statusCode: 404,
+        body: {
+        id: 1,
+        password:"test!1234",
+        admin: false
       },
     })
 
