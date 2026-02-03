@@ -8,9 +8,8 @@ describe('Log out spec', () => {
         cy.intercept('POST', '/api/auth/login', {
             body: {
                 id: 1,
-                username: 'userName',
-                firstName: 'firstName',
-                lastName: 'lastName',
+                email:"yoga@studio.com",
+                password:"test!1234",
                 admin: false
             },
         })
