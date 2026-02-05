@@ -94,4 +94,91 @@ describe('Account spec', () => {
 
         cy.url().should('include', '/me')
     })
+
+    it('information me not admin, button back', () => {
+
+        cy.visit('/login')
+
+        cy.intercept('POST', '/api/auth/login', {
+            body: {
+                id: 1,
+                email:"yoga@studio.com",
+                password:"test!1234",
+                admin: false
+            },
+        })
+
+        cy.get('input[formControlName=email]').type("yoga@studio.com")
+        cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+        
+        cy.url().should('include', '/sessions')
+
+        cy.get('span').contains('Account').click()
+
+        cy.intercept('GET','/api/user/1',
+        {
+            statusCode: 200,
+            body:{
+                id: 1,
+                firstName: 'Joel',
+                lastName: 'Dicker',
+                username: 'userName',
+                admin: false,
+                email: 'yoga@studio.com',
+                createdAt: '2024-01-01T00:00:00Z',
+                updatedAt: '2025-01-01T00:00:00Z',
+            }
+        }).as('me')
+
+        cy.wait('@me')
+        cy.contains('mat-icon', 'arrow_back').click()
+
+        cy.url().should('include', '/session')
+    })
+
+    it('information me not admin, delete account', () => {
+
+        cy.visit('/login')
+
+        cy.intercept('POST', '/api/auth/login', {
+            body: {
+                id: 1,
+                email:"yoga@studio.com",
+                password:"test!1234",
+                admin: false
+            },
+        })
+
+        cy.get('input[formControlName=email]').type("yoga@studio.com")
+        cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+        
+        cy.url().should('include', '/sessions')
+
+        cy.get('span').contains('Account').click()
+
+        cy.intercept('GET','/api/user/1',
+        {
+            statusCode: 200,
+            body:{
+                id: 1,
+                firstName: 'Joel',
+                lastName: 'Dicker',
+                username: 'userName',
+                admin: false,
+                email: 'yoga@studio.com',
+                createdAt: '2024-01-01T00:00:00Z',
+                updatedAt: '2025-01-01T00:00:00Z',
+            }
+        }).as('me')
+
+        cy.wait('@me')
+        cy.intercept('DELETE', '/api/user/1', { statusCode: 200 }).as('deleteUser')
+        cy.contains('mat-icon', 'delete').click()
+        cy.wait('@deleteUser')
+
+        cy.get('simple-snack-bar').should('be.visible').and('contain.text', "Your account has been deleted !")
+
+    })    
+
+
 });  
