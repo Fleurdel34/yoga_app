@@ -131,7 +131,7 @@ describe('Account spec', () => {
         }).as('me')
 
         cy.wait('@me')
-        cy.contains('mat-icon', 'arrow_back').click()
+        cy.get('button[mat-icon-button]').click()
 
         cy.url().should('include', '/session')
     })
@@ -173,12 +173,10 @@ describe('Account spec', () => {
 
         cy.wait('@me')
         cy.intercept('DELETE', '/api/user/1', { statusCode: 200 }).as('deleteUser')
-        cy.contains('mat-icon', 'delete').click()
+        cy.get('button[color=warn]').click()
         cy.wait('@deleteUser')
 
         cy.get('simple-snack-bar').should('be.visible').and('contain.text', "Your account has been deleted !")
-
+        cy.url().should('include', '/')
     })    
-
-
 });  
