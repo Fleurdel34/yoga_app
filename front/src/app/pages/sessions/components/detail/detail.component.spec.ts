@@ -42,6 +42,7 @@ describe('DetailComponent', () => {
     updatedAt: new Date()
   }
 
+
   const mockSessionService = {
     sessionInformation: {
       id: 1,
@@ -52,6 +53,8 @@ describe('DetailComponent', () => {
   const mockSessionApiService = {
     detail: jest.fn().mockReturnValue(of(session)),
     delete: jest.fn().mockReturnValue(of(null)),
+    participate:jest.fn().mockReturnValue(of(null)),
+    unParticipate:jest.fn().mockReturnValue(of(null)),
   }
 
   const mockTeacherService = {
@@ -110,6 +113,24 @@ describe('DetailComponent', () => {
     expect(mockSessionApiService.delete).toHaveBeenCalledWith(session.id.toString());
     expect(mockSnackBar.open).toHaveBeenCalledWith('Session deleted !', 'Close', { duration: 3000 })
     expect(mockRouter.navigate).toHaveBeenCalledWith(['sessions']);
+  });
+
+  it('should have participate', () => { 
+    component.participate(); 
+    expect(mockSessionApiService.participate).toHaveBeenCalledWith(session.id.toString(), 
+    mockSessionService.sessionInformation.id.toString());
+  });
+
+  it('should have unparticipate', () => { 
+    component.unParticipate(); 
+    expect(mockSessionApiService.unParticipate).toHaveBeenCalledWith(session.id.toString(), 
+    mockSessionService.sessionInformation.id.toString());
+  });
+
+  it('should call function back()', () =>{
+    const backMock = jest.spyOn(window.history, 'back');
+    component.back();
+    expect(backMock).toHaveBeenCalled();
   });
 
 });
