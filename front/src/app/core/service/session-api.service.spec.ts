@@ -130,4 +130,25 @@ describe('SessionsService', () => {
       req.flush(mockSession$);
     });
   });
+
+  it('should have to participate a session', () => {
+    const mockSession = {
+    id: 1,
+    name: 'Test Session',
+    description: 'This is a test session',
+    date: new Date(),
+    teacher_id: 1,
+    users: [],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    }
+
+    const userId = "1"
+    service.participate(mockSession.id.toString(),userId).subscribe((response) => {
+      expect(response).toBeTruthy();
+      const req = http.expectOne(`${environment.baseUrl}/session/${mockSession.id}participate/${userId}`); 
+      expect(req.request.method).toEqual('POST');
+      req.flush({});
+    });
+  });
 })
