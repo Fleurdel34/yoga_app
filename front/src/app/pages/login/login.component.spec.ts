@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 import { LoginComponent } from './login.component';
 import { AuthService } from 'src/app/core/service/auth.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -86,4 +86,21 @@ describe('LoginComponent', () => {
     expect(mockSessionService.logIn).toHaveBeenCalledWith(mockSessionInformation);
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/sessions']);
   });
+
+  it('should register not successfully form invalid', () => {
+      component.form.setValue({
+        email: '',
+        password: '',
+      });
+      component.submit();
+      expect(mockAuthService.login).not.toHaveBeenCalledWith();
+    });
+  
+    it('should register error', () => {
+      mockAuthService.login.mockReturnValue(throwError(()=> new Error('failed')));
+      component.form.setValue(mockLoginRequest);
+      component.submit();
+      expect(component.onError).toBeDefined;
+    });
+
 });
