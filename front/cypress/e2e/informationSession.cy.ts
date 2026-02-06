@@ -271,5 +271,173 @@ describe('Session spec', () => {
 
     });
 
-    
+    it('details session to unParticipate, user not admin', () => {
+        cy.visit('/login')
+
+        cy.intercept('POST', '/api/auth/login', {
+            body: {
+                id: 1,
+                email:"yoga@studio.com",
+                password:"test!1234",
+                admin: false
+            },
+        })
+
+        cy.get('input[formControlName=email]').type("yoga@studio.com")
+        cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+
+        cy.intercept(
+        {
+            method: 'GET',
+            url: '/api/session',
+        },
+        [
+            {
+                id: 1,
+                name: "Meditation Session",
+                description: "relaxing meditation session",
+                date: "2025-01-01T00:00:00Z",
+                teacher_id: 1,
+                users: [1, 2, 3],
+                createdAt: "2025-01-01T00:00:00Z",
+                updatedAt: "2025-01-22T00:00:00Z",
+            },
+            {
+                id: 2,
+                name: "Yoga Session",
+                description: "energizing yoga session",
+                date: "2025-01-02T00:00:00Z",
+                teacher_id: 2,
+                users: [4, 5],
+                createdAt: "2025-01-02T00:00:00Z",
+                updatedAt: "2025-02-15T00:00:00Z",
+            },
+        ]).as('session')
+
+        cy.wait("@session")
+
+        cy.get('button').eq(0).contains('Detail').click()
+
+        cy.intercept('GET','/api/session/1',
+        {
+            body:
+            {
+                id: 1,
+                name: "Meditation Session",
+                description: "relaxing meditation session",
+                date: "2025-01-01T00:00:00Z",
+                teacher_id: 1,
+                users: [1,2,3],
+                createdAt: "2025-01-01T00:00:00Z",
+                updatedAt: "2025-01-22T00:00:00Z",
+            },
+        },).as('detail')    
+
+
+        cy.intercept('GET', '/api/teacher/1',
+        {body: {
+                id: 1,
+                lastName: "Doe",
+                firstName: "John",
+                createdAt: "2025-01-02T00:00:00Z",
+                updatedAt: "2025-02-15T00:00:00Z",
+            },   
+        },).as('teacher')
+
+        cy.wait("@detail")
+        cy.wait("@teacher")
+
+        cy.intercept('DELETE','api/session/1/unParticipate/1',{
+            statusCode:200
+        }).as('unParticipate')
+
+        cy.get('button').contains('Do not participate').click()
+
+        cy.url().should('include', '/session')        
+    })
+
+    it('details session to participate, user not admin', () => {
+        cy.visit('/login')
+
+        cy.intercept('POST', '/api/auth/login', {
+            body: {
+                id: 1,
+                email:"yoga@studio.com",
+                password:"test!1234",
+                admin: false
+            },
+        })
+
+        cy.get('input[formControlName=email]').type("yoga@studio.com")
+        cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+
+        cy.intercept(
+        {
+            method: 'GET',
+            url: '/api/session',
+        },
+        [
+            {
+                id: 1,
+                name: "Meditation Session",
+                description: "relaxing meditation session",
+                date: "2025-01-01T00:00:00Z",
+                teacher_id: 1,
+                users: [],
+                createdAt: "2025-01-01T00:00:00Z",
+                updatedAt: "2025-01-22T00:00:00Z",
+            },
+            {
+                id: 2,
+                name: "Yoga Session",
+                description: "energizing yoga session",
+                date: "2025-01-02T00:00:00Z",
+                teacher_id: 2,
+                users: [4, 5],
+                createdAt: "2025-01-02T00:00:00Z",
+                updatedAt: "2025-02-15T00:00:00Z",
+            },
+        ]).as('session')
+
+        cy.wait("@session")
+
+        cy.get('button').eq(0).contains('Detail').click()
+
+        cy.intercept('GET','/api/session/1',
+        {
+            body:
+            {
+                id: 1,
+                name: "Meditation Session",
+                description: "relaxing meditation session",
+                date: "2025-01-01T00:00:00Z",
+                teacher_id: 1,
+                users: [],
+                createdAt: "2025-01-01T00:00:00Z",
+                updatedAt: "2025-01-22T00:00:00Z",
+            },
+        },).as('detail')    
+
+
+        cy.intercept('GET', '/api/teacher/1',
+        {body: {
+                id: 1,
+                lastName: "Doe",
+                firstName: "John",
+                createdAt: "2025-01-02T00:00:00Z",
+                updatedAt: "2025-02-15T00:00:00Z",
+            },   
+        },).as('teacher')
+
+        cy.wait("@detail")
+        cy.wait("@teacher")
+
+        cy.intercept('POST','api/session/1/participate/1',{
+            statusCode:200
+        }).as('participate')
+
+        cy.get('button').contains('Participate').click()
+
+        cy.url().should('include', '/session')        
+    })
 })  
