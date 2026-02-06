@@ -37,6 +37,8 @@ Generate coverage report (you should launch e2e test before):
 
 > npm run e2e:coverage
 
+to get a correct coverage for a component => To do generate coverage component by component with test files of component. 
+
 Report is available here:
 
 > front/coverage/lcov-report/index.html
