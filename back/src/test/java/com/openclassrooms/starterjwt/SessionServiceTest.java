@@ -326,5 +326,38 @@ public class SessionServiceTest {
         Mockito.verify(sessionRepository, Mockito.never()).save(Mockito.any());
     }
 
+    @Test
+    void noLongerParticipateTest_IdInvalid(){
+        assertThatThrownBy(() -> sessionService.noLongerParticipate("abc","abc"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("id not valid");
+
+        Mockito.verifyNoInteractions(sessionRepository);
+
+    }
+
+    @Test
+    void noLongerParticipateTest_NotAlreadyParticipate() {
+
+        Session yoga =new Session();
+        yoga.setId(1L);
+
+        User john = new User();
+        john.setId(2L);
+
+        yoga.setUsers(new ArrayList<>(List.of()));
+
+
+        Mockito.when(sessionRepository.findById(yoga.getId()))
+                .thenReturn(Optional.of(yoga));
+
+
+        assertThatThrownBy(() -> sessionService.noLongerParticipate("1","2"))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("Not already participate");
+
+        Mockito.verify(sessionRepository, Mockito.never()).save(Mockito.any());
+    }
+
 
 }
