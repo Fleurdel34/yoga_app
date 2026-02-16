@@ -1,7 +1,5 @@
 package com.openclassrooms.starterjwt;
 
-
-
 import com.openclassrooms.starterjwt.models.User;
 import com.openclassrooms.starterjwt.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -18,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc(addFilters = true)
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class AuthControllerTest {
 
@@ -143,8 +141,6 @@ public class AuthControllerTest {
                "password": "rose234"
                }
                """;
-
-
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
