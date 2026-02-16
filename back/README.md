@@ -133,3 +133,24 @@ Importez la collection Postman
 La documentation de Postman se trouve ici :
 
 https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-data-into-postman
+
+## Tests
+### Outils utilisés
+>JUnit pour l’exécution des tests 
+>Mockito pour le mock des dépendances. 
+>Plugin Code Coverage for Java à activer  dans IntelliJ IDEA.
+
+### Lancer les tests et obtenir le taux de couverture
+>Ouvrir le projet dans IntelliJ IDEA.
+>Ouvrir le dossier : src/test/java/...
+
+### Methode 1 pour lancer les tests et obtenir le taux de couverture
+>Faire un clic droit sur un fichier de test individuel ou le package global de tests.
+>Sélectionner Run 'NomDuTest' with Coverage.
+
+### Methode 2 pour lancer les tests et obtenir le taux de couverture
+> Sélectionner la configuration de test dans le menu déroulant en haut à droite.
+> Cliquer sur l’icône Run with Coverage
+
+
+
