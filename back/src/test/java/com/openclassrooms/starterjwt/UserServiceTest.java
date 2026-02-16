@@ -123,6 +123,4 @@ public class UserServiceTest {
 
         Mockito.verify(userRepository).findById(2L);
     }
-
-
 }
