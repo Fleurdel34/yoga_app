@@ -43,9 +43,8 @@ public class UserService {
         User user = this.userRepository.findById(idLong).orElse(null);
 
         if (user == null) {
-            throw new NotFoundException("Teacher not found");
+            throw new NotFoundException("User not found");
         }
-
         return user;
     }
 

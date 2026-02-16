@@ -19,7 +19,7 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTests {
+public class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -32,6 +32,7 @@ public class UserServiceTests {
         User jane = new User(null, "jane@gmail.com",
                 "Tarzan", "Jane", "Toto1234",
                 false, LocalDateTime.now() , LocalDateTime.now());
+
         User janeOk = new User(1L, "jane@gmail.com",
                 "Tarzan", "Jane", "Toto1234",
                 false, LocalDateTime.now() , LocalDateTime.now());
@@ -59,6 +60,25 @@ public class UserServiceTests {
 
         Mockito.verify(userRepository, Mockito.never()).save(Mockito.any());
 
+    }
+
+    @Test
+    void testCreateUserFailed(){
+        User john = new User();
+        john.setFirstName("John");
+        john.setLastName("DOE");
+        john.setPassword("toto1234");
+        john.setAdmin(false);
+
+        Mockito.when(userRepository.save(john))
+                .thenThrow(new IllegalArgumentException("Email can't be null"));
+
+        try {
+            this.userService.createUser(john);
+        }catch(Exception e){
+            assertThat(e).isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("Email can't be null");
+        }
     }
 
     @Test
